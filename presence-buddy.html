@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Presence Buddy ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: #0f0520;
+  background-image:
+    radial-gradient(ellipse at 18% 82%, rgba(124,58,237,0.38) 0%, transparent 52%),
+    radial-gradient(ellipse at 82% 14%, rgba(30,27,75,0.7) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 48%, rgba(236,72,153,0.09) 0%, transparent 70%);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 44px 16px 64px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Stars ── */
+.star {
+  position: fixed;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  animation: twinkle var(--d,3s) var(--dl,0s) infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%,100% { opacity:.15; transform:scale(.8); }
+  50%      { opacity:1;   transform:scale(1.3); }
+}
+
+/* ── Layout ── */
+.container {
+  width: 100%; max-width: 420px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 18px; position: relative; z-index: 1;
+}
+
+/* ── Title ── */
+.app-title {
+  font-size: clamp(26px,6.5vw,38px); font-weight: 900;
+  text-align: center; letter-spacing: -.5px; line-height: 1.2;
+  background: linear-gradient(130deg,#f9a8d4 0%,#c084fc 50%,#67e8f9 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.app-sub {
+  font-size: 13px; color: rgba(255,255,255,.4);
+  text-align: center; margin-top: -10px; font-weight: 600;
+}
+
+/* ── Buddy ── */
+.buddy-wrap {
+  position: relative; width: 180px; height: 180px;
+  display: flex; align-items: center; justify-content: center;
+}
+.buddy-glow {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,.28) 0%, transparent 70%);
+  transition: background .9s;
+}
+.buddy-glow.awake {
+  background: radial-gradient(circle, rgba(236,72,153,.32) 0%, transparent 70%);
+  animation: glowPulse 2.2s ease-in-out infinite;
+}
+@keyframes glowPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+
+.buddy-svg {
+  position: relative; z-index: 1;
+  animation: breathe 4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 28px rgba(124,58,237,.55));
+  transition: filter .8s;
+}
+.buddy-svg.awake {
+  animation: buddyBounce 1.9s ease-in-out infinite;
+  filter: drop-shadow(0 12px 36px rgba(236,72,153,.55));
+}
+@keyframes breathe    { 0%,100%{transform:scale(1) translateY(0)} 50%{transform:scale(1.035) translateY(-4px)} }
+@keyframes buddyBounce{ 0%,100%{transform:scale(1) translateY(0) rotate(-2.5deg)} 50%{transform:scale(1.06) translateY(-12px) rotate(2.5deg)} }
+
+/* Zzz */
+.zzz-wrap { position:absolute; right:14px; top:22px; pointer-events:none; }
+.zzz-item {
+  position: absolute; font-weight: 900; font-family:'Nunito',sans-serif;
+  color: #fcd34d;
+  text-shadow: 0 0 12px rgba(252,211,77,.7);
+  animation: zzzFloat 2.1s ease-in infinite;
+  opacity: 0;
+}
+.zzz-item:nth-child(1){ font-size:22px; left:0;   animation-delay:0s;   }
+.zzz-item:nth-child(2){ font-size:17px; left:18px; animation-delay:.72s; }
+.zzz-item:nth-child(3){ font-size:12px; left:32px; animation-delay:1.44s;}
+@keyframes zzzFloat {
+  0%   { opacity:0; transform:translate(0,0) scale(.8); }
+  18%  { opacity:1; }
+  100% { opacity:0; transform:translate(14px,-38px) scale(.5); }
+}
+
+/* Active sparkles */
+.sparkle-wrap { position:absolute; inset:0; pointer-events:none; }
+.sparkle-item {
+  position:absolute; font-size:15px;
+  animation: sparkle 2.6s ease-in-out infinite;
+}
+.sparkle-item:nth-child(1){ left:4%;  top:22%; animation-delay:0s;   }
+.sparkle-item:nth-child(2){ right:6%; top:28%; animation-delay:.65s; }
+.sparkle-item:nth-child(3){ left:12%; bottom:20%; animation-delay:1.3s;}
+.sparkle-item:nth-child(4){ right:10%;bottom:18%; animation-delay:1.95s;}
+@keyframes sparkle {
+  0%,100%{ transform:translateY(0) scale(1); opacity:.7; }
+  50%     { transform:translateY(-9px) scale(1.35); opacity:1; }
+}
+
+/* ── Status message ── */
+.status-msg {
+  font-size: 15px; font-weight: 700; color: rgba(255,255,255,.72);
+  text-align: center; min-height: 24px; transition: opacity .35s;
+}
+.status-msg.fade { opacity: 0; }
+
+/* ── Glass card ── */
+.glass {
+  background: rgba(255,255,255,.065);
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 20px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* ── Stats row ── */
+.stats-row { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.stat-card  { display:flex; flex-direction:column; align-items:center; gap:5px; padding:18px 12px; }
+.stat-icon  { font-size:22px; }
+.stat-label { font-size:10px; color:rgba(255,255,255,.4); letter-spacing:1.2px; text-transform:uppercase; font-weight:700; }
+.stat-value { font-size:19px; font-weight:900; letter-spacing:.5px; }
+.stat-value.pop { animation: statPop .35s ease; }
+@keyframes statPop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+
+/* ── Status pills ── */
+.status-card { width:100%; padding:16px 22px; display:flex; flex-direction:column; gap:12px; }
+.status-row  { display:flex; justify-content:space-between; align-items:center; font-size:13.5px; font-weight:700; color:rgba(255,255,255,.68); }
+.pill {
+  font-size:10px; font-weight:800; letter-spacing:1.5px;
+  padding:4px 12px; border-radius:30px;
+  background:rgba(255,255,255,.1); color:rgba(255,255,255,.38);
+  transition: all .4s;
+}
+.pill.on { background:linear-gradient(135deg,#10b981,#059669); color:#fff; box-shadow:0 2px 14px rgba(16,185,129,.45); }
+
+/* ── Activity zone ── */
+.zone-label { font-size:10px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.28); margin-bottom:7px; }
+.playground {
+  width:100%; height:108px; border-radius:16px; overflow:hidden;
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+  position:relative;
+}
+.playground canvas { display:block; width:100%; height:100%; }
+.playground-off {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:7px; color:rgba(255,255,255,.22); font-size:11px; font-weight:800;
+  letter-spacing:2px; text-transform:uppercase; pointer-events:none;
+}
+.playground-off .pico { font-size:26px; opacity:.35; }
+
+/* ── Progress bar ── */
+.progress-wrap { width:100%; display:none; flex-direction:column; gap:7px; padding:0 2px; }
+.progress-wrap.show { display:flex; }
+.progress-hdr { display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:rgba(255,255,255,.4); }
+.progress-hdr span:last-child { color:rgba(255,255,255,.75); }
+.progress-track { height:5px; background:rgba(255,255,255,.1); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#ec4899,#8b5cf6); border-radius:3px; width:0%; transition:width 1s linear; }
+
+/* ── Slider ── */
+.slider-wrap { width:100%; padding:18px 22px; display:flex; flex-direction:column; gap:10px; }
+.slider-hdr  { display:flex; justify-content:space-between; align-items:center; font-size:14px; font-weight:700; color:rgba(255,255,255,.68); }
+.slider-val  {
+  font-size:17px; font-weight:900;
+  background:linear-gradient(130deg,#f9a8d4,#c084fc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+input[type=range] {
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:5px; border-radius:3px;
+  background:rgba(255,255,255,.15); outline:none; cursor:pointer;
+}
+input[type=range]:disabled { opacity:.38; cursor:not-allowed; }
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+  background:linear-gradient(135deg,#ec4899,#8b5cf6);
+  cursor:pointer; box-shadow:0 2px 14px rgba(236,72,153,.65);
+  border:2.5px solid rgba(255,255,255,.9);
+}
+input[type=range]:disabled::-webkit-slider-thumb { background:rgba(255,255,255,.28); box-shadow:none; }
+.slider-sub { display:flex; justify-content:space-between; font-size:10px; color:rgba(255,255,255,.22); font-weight:600; }
+
+/* ── Main button ── */
+.toggle-btn {
+  width:100%; padding:19px 32px; border:none; border-radius:50px;
+  font-family:'Nunito',sans-serif; font-size:17px; font-weight:900; letter-spacing:.3px;
+  cursor:pointer; transition:transform .2s, box-shadow .3s, opacity .2s;
+  background:linear-gradient(135deg,#ec4899 0%,#8b5cf6 100%); color:#fff;
+  box-shadow:0 4px 32px rgba(236,72,153,.48);
+  position:relative; overflow:hidden;
+}
+.toggle-btn::before {
+  content:''; position:absolute; inset:0; border-radius:50px;
+  background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,transparent 60%);
+  pointer-events:none;
+}
+.toggle-btn:hover  { transform:scale(1.04); box-shadow:0 6px 44px rgba(236,72,153,.65); }
+.toggle-btn:active { transform:scale(.97); }
+.toggle-btn.sleep-mode {
+  background:rgba(255,255,255,.09); color:rgba(255,255,255,.55);
+  box-shadow:none; border:1px solid rgba(255,255,255,.14);
+}
+.toggle-btn.sleep-mode:hover { background:rgba(255,255,255,.14); transform:scale(1.02); }
+
+/* ── Info ── */
+.info { width:100%; padding:16px 22px; }
+.info-title { font-size:11px; font-weight:800; letter-spacing:2px; color:rgba(255,255,255,.5); text-transform:uppercase; margin-bottom:9px; }
+.info-row   { font-size:12px; color:rgba(255,255,255,.33); font-weight:600; line-height:2.1; }
+
+/* ── Confetti ── */
+.confetti {
+  position:fixed; pointer-events:none; z-index:9999;
+  border-radius: 3px;
+  animation: confFall var(--dur,1.2s) ease-in forwards;
+}
+@keyframes confFall {
+  0%   { opacity:1; transform:translateY(0) rotate(0deg) scale(1); }
+  100% { opacity:0; transform:translateY(320px) rotate(540deg) scale(0); }
+}
+
+/* ── Ping ripple ── */
+.ripple {
+  position:fixed; pointer-events:none; z-index:9998;
+  width:44px; height:44px; margin:-22px 0 0 -22px;
+  border-radius:50%; border:2.5px solid;
+  animation:rippleOut .65s ease-out forwards;
+}
+@keyframes rippleOut { from{transform:scale(0);opacity:1} to{transform:scale(3.2);opacity:0} }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div class="container">
+
+  <!-- Title -->
+  <div>
+    <h1 class="app-title">Presence Buddy ✨</h1>
+    <p class="app-sub">your sleepy little screen-keeper</p>
+  </div>
+
+  <!-- Buddy character -->
+  <div class="buddy-wrap" id="buddyWrap">
+    <div class="buddy-glow" id="buddyGlow"></div>
+
+    <svg class="buddy-svg" id="buddySvg" viewBox="0 0 120 120" width="158" height="158">
+      <defs>
+        <radialGradient id="bg" cx="38%" cy="30%" r="68%">
+          <stop offset="0%" stop-color="#c084fc"/>
+          <stop offset="100%" stop-color="#6d28d9"/>
+        </radialGradient>
+        <radialGradient id="earGrad" cx="40%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#a855f7"/>
+          <stop offset="100%" stop-color="#7c3aed"/>
+        </radialGradient>
+      </defs>
+      <!-- Ground shadow -->
+      <ellipse cx="60" cy="110" rx="32" ry="6.5" fill="rgba(0,0,0,.22)"/>
+      <!-- Body -->
+      <ellipse cx="60" cy="64" rx="48" ry="47" fill="url(#bg)"/>
+      <!-- Shine -->
+      <ellipse cx="43" cy="42" rx="15" ry="11" fill="rgba(255,255,255,.16)" transform="rotate(-22,43,42)"/>
+      <!-- Ears -->
+      <ellipse cx="21" cy="26" rx="11" ry="10.5" fill="url(#earGrad)"/>
+      <ellipse cx="99" cy="26" rx="11" ry="10.5" fill="url(#earGrad)"/>
+      <ellipse cx="21" cy="25" rx="6.5" ry="6" fill="rgba(249,168,212,.5)"/>
+      <ellipse cx="99" cy="25" rx="6.5" ry="6" fill="rgba(249,168,212,.5)"/>
+
+      <!-- SLEEP STATE -->
+      <g id="stateAsleep">
+        <!-- Closed eyes -->
+        <path d="M 36 61 Q 43 54 50 61" stroke="rgba(255,255,255,.9)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M 70 61 Q 77 54 84 61" stroke="rgba(255,255,255,.9)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- Sleepy eyelashes -->
+        <line x1="36" y1="60" x2="33" y2="57" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="84" y1="60" x2="87" y2="57" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Neutral mouth -->
+        <path d="M 52 77 Q 60 81 68 77" stroke="rgba(255,255,255,.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Cute little drool -->
+        <ellipse cx="57" cy="83" rx="3" ry="2" fill="rgba(167,139,250,.4)"/>
+      </g>
+
+      <!-- AWAKE STATE -->
+      <g id="stateAwake" style="display:none">
+        <!-- Eyes white -->
+        <circle cx="43" cy="59" r="12" fill="white"/>
+        <circle cx="77" cy="59" r="12" fill="white"/>
+        <!-- Pupils -->
+        <circle cx="44.5" cy="57.5" r="7.5" fill="#2e1065"/>
+        <circle cx="78.5" cy="57.5" r="7.5" fill="#2e1065"/>
+        <!-- Shine dots -->
+        <circle cx="47.5" cy="55" r="3.2" fill="white"/>
+        <circle cx="81.5" cy="55" r="3.2" fill="white"/>
+        <circle cx="42"   cy="62" r="1.5" fill="rgba(255,255,255,.55)"/>
+        <circle cx="76"   cy="62" r="1.5" fill="rgba(255,255,255,.55)"/>
+        <!-- Blush -->
+        <circle cx="25" cy="72" r="10" fill="rgba(249,168,212,.42)"/>
+        <circle cx="95" cy="72" r="10" fill="rgba(249,168,212,.42)"/>
+        <!-- Happy mouth -->
+        <path d="M 46 77 Q 60 94 74 77" stroke="rgba(255,255,255,.9)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        <!-- Teeth hint -->
+        <path d="M 50 78 Q 60 89 70 78" stroke="rgba(255,255,255,.25)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      </g>
+    </svg>
+
+    <!-- Zzz -->
+    <div class="zzz-wrap" id="zzzWrap">
+      <span class="zzz-item">z</span>
+      <span class="zzz-item">z</span>
+      <span class="zzz-item">z</span>
+    </div>
+
+    <!-- Active sparkles -->
+    <div class="sparkle-wrap" id="sparkleWrap" style="display:none">
+      <span class="sparkle-item">✨</span>
+      <span class="sparkle-item">⭐</span>
+      <span class="sparkle-item">💫</span>
+      <span class="sparkle-item">🌟</span>
+    </div>
+  </div>
+
+  <!-- Status message -->
+  <p class="status-msg" id="statusMsg">💤 Catching up on some well-deserved sleep...</p>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="glass stat-card">
+      <span class="stat-icon">⏱️</span>
+      <span class="stat-label">Session</span>
+      <span class="stat-value" id="uptimeEl">00:00:00</span>
+    </div>
+    <div class="glass stat-card">
+      <span class="stat-icon">📡</span>
+      <span class="stat-label">Pings Sent</span>
+      <span class="stat-value" id="pingEl">0</span>
+    </div>
+  </div>
+
+  <!-- System status -->
+  <div class="glass status-card">
+    <div class="status-row">
+      <span>🖥️ Screen Wake Lock</span>
+      <span class="pill" id="wakePill">OFF</span>
+    </div>
+    <div class="status-row">
+      <span>🐭 Mouse Simulation</span>
+      <span class="pill" id="simPill">IDLE</span>
+    </div>
+  </div>
+
+  <!-- Activity zone -->
+  <div style="width:100%">
+    <div class="zone-label">🎮 activity zone</div>
+    <div class="playground" id="playground">
+      <canvas id="theCanvas" width="500" height="107"></canvas>
+      <div class="playground-off" id="playOff">
+        <span class="pico">😴</span>
+        <span>activate to see the magic</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-hdr">
+      <span>Next ping in</span>
+      <span id="countdownEl">—</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Interval slider -->
+  <div class="glass slider-wrap">
+    <div class="slider-hdr">
+      <span>⏰ Ping every</span>
+      <span class="slider-val" id="sliderVal">30s</span>
+    </div>
+    <input type="range" id="sliderEl" min="10" max="120" step="5" value="30"/>
+    <div class="slider-sub">
+      <span>10s — stay sharp</span>
+      <span>120s — play it cool</span>
+    </div>
+  </div>
+
+  <!-- Main button -->
+  <button class="toggle-btn" id="toggleBtn">🌙 Wake Up Buddy!</button>
+
+  <!-- Notes -->
+  <div class="glass info">
+    <div class="info-title">📋 Good to Know</div>
+    <div class="info-row">🌐 Teams Web — browser events keep you active 🟢</div>
+    <div class="info-row">💻 Teams Desktop — keep this tab in focus for best results</div>
+    <div class="info-row">🔒 Wake Lock works on Chrome, Edge &amp; Firefox (HTTPS)</div>
+    <div class="info-row">⚡ For bulletproof OS control, pair with AutoHotkey</div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+(function(){
+  // ── Generate stars ──────────────────────────────────────────
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = 1 + Math.random() * 2.2;
+    s.style.cssText = `
+      left:${Math.random()*100}%; top:${Math.random()*100}%;
+      width:${sz}px; height:${sz}px;
+      --d:${2+Math.random()*4}s; --dl:${Math.random()*5}s;
+      opacity:${0.1+Math.random()*0.55};
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // ── State ───────────────────────────────────────────────────
+  let isActive   = false;
+  let wakeLock   = null;
+  const wlOK     = 'wakeLock' in navigator;
+  let animFrame  = null;
+  let actTimer   = null;
+  let uptTimer   = null;
+  let uptime     = 0;
+  let pingCount  = 0;
+  let interval   = 30;
+  let hue        = 0;
+  let msgIdx     = 0;
+
+  const sleepMsgs = [
+    "💤 Catching up on some well-deserved sleep...",
+    "😴 Dreaming of green Teams status...",
+    "🌙 Resting up, ready when you need me!",
+    "💤 zzzz... poke me to get started 👉",
+    "🛌 Napping peacefully in the corner...",
+  ];
+  const activeMsgs = [
+    "🐾 On duty! Your status stays green!",
+    "💪 Teams won't catch you slipping, boss!",
+    "🚀 Working hard so you look busy!",
+    "💚 Status? Still green. You're welcome! 😎",
+    "👀 Eyes open, cursor secretly moving...",
+    "✨ Totally inconspicuous mouse movements!",
+    "🕵️ Stealthily simulating productivity...",
+    "🎯 Another ping sent — you're still 'active'!",
+    "🌟 I got you! Go grab a coffee ☕",
+    "🔥 Keeping the dream alive, one ping at a time!",
+  ];
+
+  // ── Canvas ──────────────────────────────────────────────────
+  const canvas = document.getElementById('theCanvas');
+  const ctx    = canvas.getContext('2d');
+  const ball   = { x:250, y:53, vx:2.4, vy:1.6 };
+  const trail  = [];
+
+  function star5(cx,cy,r,color){
+    ctx.save(); ctx.translate(cx,cy); ctx.beginPath();
+    for(let i=0;i<10;i++){
+      const a = (i*Math.PI)/5 - Math.PI/2;
+      const d = i%2===0 ? r : r*.42;
+      i===0 ? ctx.moveTo(Math.cos(a)*d, Math.sin(a)*d)
+            : ctx.lineTo(Math.cos(a)*d, Math.sin(a)*d);
+    }
+    ctx.closePath(); ctx.fillStyle=color; ctx.fill(); ctx.restore();
+  }
+
+  function startCanvas(){
+    trail.length = 0;
+    (function tick(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      hue = (hue+1.4)%360;
+      ball.x += ball.vx; ball.y += ball.vy;
+      if(ball.x<=12||ball.x>=canvas.width-12){
+        ball.vx*=-1; ball.x=Math.max(12,Math.min(canvas.width-12,ball.x));
+      }
+      if(ball.y<=12||ball.y>=canvas.height-12){
+        ball.vy*=-1; ball.y=Math.max(12,Math.min(canvas.height-12,ball.y));
+      }
+      trail.push({x:ball.x,y:ball.y});
+      if(trail.length>38) trail.shift();
+
+      trail.forEach((p,i)=>{
+        const t=i/trail.length;
+        const h=(hue+i*8)%360;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,t*5.5,0,Math.PI*2);
+        ctx.fillStyle=`hsla(${h},100%,68%,${(t*.7).toFixed(2)})`;
+        ctx.fill();
+      });
+
+      ctx.shadowBlur=22; ctx.shadowColor=`hsl(${hue},100%,65%)`;
+      star5(ball.x,ball.y,9,`hsl(${hue},100%,75%)`);
+      ctx.shadowBlur=0;
+
+      animFrame=requestAnimationFrame(tick);
+    })();
+  }
+
+  function stopCanvas(){
+    cancelAnimationFrame(animFrame);
+    animFrame=null;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+
+  // ── Wake Lock ───────────────────────────────────────────────
+  async function getWakeLock(){
+    if(!wlOK) return;
+    try{
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release',()=>{ wakeLock=null; pillOff('wakePill','OFF'); });
+      pillOn('wakePill','ACTIVE');
+    }catch(e){ pillOff('wakePill','FAILED'); }
+  }
+  async function dropWakeLock(){
+    if(wakeLock){ try{ await wakeLock.release(); }catch(e){} wakeLock=null; }
+    pillOff('wakePill','OFF');
+  }
+  function pillOn(id,label){
+    const p=document.getElementById(id);
+    p.textContent=label; p.classList.add('on');
+  }
+  function pillOff(id,label){
+    const p=document.getElementById(id);
+    p.textContent=label; p.classList.remove('on');
+  }
+
+  document.addEventListener('visibilitychange', async()=>{
+    if(document.visibilityState==='visible'&&isActive&&!wakeLock) await getWakeLock();
+  });
+
+  // ── Mouse simulation ────────────────────────────────────────
+  function ping(){
+    const x=60+Math.random()*(window.innerWidth-120)|0;
+    const y=60+Math.random()*(window.innerHeight-120)|0;
+    ['mousemove','pointermove'].forEach(t=>
+      document.dispatchEvent(new MouseEvent(t,{
+        clientX:x,clientY:y,bubbles:true,
+        movementX:(Math.random()-.5)*12,
+        movementY:(Math.random()-.5)*12,
+      }))
+    );
+    pingCount++;
+    const el = document.getElementById('pingEl');
+    el.textContent = pingCount;
+    el.classList.remove('pop');
+    void el.offsetWidth;
+    el.classList.add('pop');
+    ripple();
+    if(pingCount%4===0) nextMsg();
+  }
+
+  // ── Ripple effect ────────────────────────────────────────────
+  const rippleColors=['#ec4899','#8b5cf6','#22d3ee','#fbbf24','#34d399'];
+  function ripple(){
+    const r=document.createElement('div');
+    r.className='ripple';
+    const c=rippleColors[Math.floor(Math.random()*rippleColors.length)];
+    r.style.cssText=`
+      left:${Math.random()*80+10}%; top:${Math.random()*70+10}%;
+      border-color:${c}; animation-duration:.6s;
+    `;
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),700);
+  }
+
+  // ── Confetti ─────────────────────────────────────────────────
+  const confColors=['#ec4899','#8b5cf6','#22d3ee','#fcd34d','#34d399','#fb7185','#a78bfa'];
+  function confetti(){
+    const btn=document.getElementById('toggleBtn');
+    const r=btn.getBoundingClientRect();
+    for(let i=0;i<55;i++){
+      setTimeout(()=>{
+        const c=document.createElement('div');
+        c.className='confetti';
+        const sz=6+Math.random()*6;
+        c.style.cssText=`
+          background:${confColors[Math.floor(Math.random()*confColors.length)]};
+          left:${r.left+r.width/2+(Math.random()-.5)*240}px;
+          top:${r.top+10}px;
+          width:${sz}px; height:${sz}px;
+          border-radius:${Math.random()>.5?'50%':'3px'};
+          --dur:${.9+Math.random()*.8}s;
+        `;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),1800);
+      },Math.random()*220);
+    }
+  }
+
+  // ── Message cycling ──────────────────────────────────────────
+  function nextMsg(){
+    const el=document.getElementById('statusMsg');
+    el.classList.add('fade');
+    setTimeout(()=>{
+      const msgs=isActive?activeMsgs:sleepMsgs;
+      msgIdx=(msgIdx+1)%msgs.length;
+      el.textContent=msgs[msgIdx];
+      el.classList.remove('fade');
+    },350);
+  }
+  setInterval(()=>{ if(!isActive) nextMsg(); },4500);
+
+  // ── Buddy state ──────────────────────────────────────────────
+  function setBuddy(awake){
+    document.getElementById('stateAsleep').style.display=awake?'none':'';
+    document.getElementById('stateAwake').style.display=awake?'':'none';
+    document.getElementById('zzzWrap').style.display=awake?'none':'';
+    document.getElementById('sparkleWrap').style.display=awake?'':'none';
+    const svg=document.getElementById('buddySvg');
+    const glow=document.getElementById('buddyGlow');
+    svg.classList.toggle('awake',awake);
+    glow.classList.toggle('awake',awake);
+  }
+
+  // ── Progress bar ─────────────────────────────────────────────
+  function refreshProgress(){
+    if(!isActive) return;
+    const elapsed=uptime%interval;
+    document.getElementById('progressFill').style.width=((elapsed/interval)*100)+'%';
+    document.getElementById('countdownEl').textContent=(interval-elapsed)+'s';
+  }
+
+  // ── Activate / Deactivate ────────────────────────────────────
+  async function activate(){
+    isActive=true;
+    await getWakeLock();
+    setBuddy(true);
+    confetti();
+    document.getElementById('statusMsg').textContent=activeMsgs[0]; msgIdx=0;
+    pillOn('simPill','ACTIVE');
+    ping();
+    actTimer=setInterval(ping,interval*1000);
+    uptTimer=setInterval(()=>{
+      uptime++;
+      const h=String(Math.floor(uptime/3600)).padStart(2,'0');
+      const m=String(Math.floor((uptime%3600)/60)).padStart(2,'0');
+      const s=String(uptime%60).padStart(2,'0');
+      document.getElementById('uptimeEl').textContent=`${h}:${m}:${s}`;
+      refreshProgress();
+    },1000);
+    startCanvas();
+    document.getElementById('playOff').style.display='none';
+    document.getElementById('progressWrap').classList.add('show');
+    document.getElementById('sliderEl').disabled=true;
+    const btn=document.getElementById('toggleBtn');
+    btn.textContent='😴 Let Buddy Rest';
+    btn.classList.add('sleep-mode');
+  }
+
+  async function deactivate(){
+    isActive=false;
+    await dropWakeLock();
+    setBuddy(false);
+    clearInterval(actTimer); clearInterval(uptTimer);
+    actTimer=uptTimer=null;
+    uptime=pingCount=0;
+    document.getElementById('uptimeEl').textContent='00:00:00';
+    document.getElementById('pingEl').textContent='0';
+    pillOff('simPill','IDLE');
+    stopCanvas();
+    document.getElementById('playOff').style.display='flex';
+    document.getElementById('progressWrap').classList.remove('show');
+    document.getElementById('progressFill').style.width='0%';
+    document.getElementById('sliderEl').disabled=false;
+    document.getElementById('statusMsg').textContent=sleepMsgs[0]; msgIdx=0;
+    ball.x=250; ball.y=53; ball.vx=2.4; ball.vy=1.6;
+    const btn=document.getElementById('toggleBtn');
+    btn.textContent='🌙 Wake Up Buddy!';
+    btn.classList.remove('sleep-mode');
+  }
+
+  // ── Events ───────────────────────────────────────────────────
+  document.getElementById('toggleBtn').addEventListener('click',()=>{
+    isActive?deactivate():activate();
+  });
+  document.getElementById('sliderEl').addEventListener('input',e=>{
+    interval=Number(e.target.value);
+    const label=interval>=60?`${(interval/60).toFixed(1).replace('.0','')}m`:interval+'s';
+    document.getElementById('sliderVal').textContent=label;
+  });
+
+  // Init
+  pillOff('wakePill', wlOK?'OFF':'N/A');
+  pillOff('simPill','IDLE');
+})();
+</script>
+</body>
+</html>
