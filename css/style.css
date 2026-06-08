@@ -22,9 +22,9 @@
   --glass-blur:    18px;
 
   --text-primary:  #ffffff;
-  --text-sec:      rgba(255,255,255,0.72);
-  --text-muted:    rgba(255,255,255,0.4);
-  --text-dim:      rgba(255,255,255,0.22);
+  --text-sec:      rgba(255, 255, 255, 0.934);
+  --text-muted:    rgba(249, 248, 248, 0.96);
+  --text-dim:      rgba(255, 255, 255, 0.877);
 
   --grad-main:     linear-gradient(130deg,#f9a8d4 0%,#c084fc 50%,#67e8f9 100%);
   --grad-btn:      linear-gradient(135deg,#ec4899 0%,#8b5cf6 100%);
