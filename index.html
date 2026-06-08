@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Presence Buddy keeps your Microsoft Teams status active using smart browser tricks. No install, no login, no drama."/>
+  <meta property="og:title" content="Presence Buddy ✨ — Stay Green, Stay Sane"/>
+  <meta property="og:description" content="Keep your Teams presence active while you live your actual life."/>
+  <title>Presence Buddy ✨ — Stay Green, Stay Sane</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/animations.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/sections.css"/>
+</head>
+<body>
+
+<!-- ── Stars ── -->
+<div id="stars"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════ -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">✨ Presence Buddy</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#use-cases">Use Cases</a>
+      <a href="#faq">FAQ</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#hero" class="nav-cta">Wake Up Buddy →</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu">☰</button>
+  </div>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#use-cases">Use Cases</a>
+    <a href="#faq">FAQ</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO — THE APP
+═══════════════════════════════════════════════════════════ -->
+<section id="hero">
+
+  <div class="hero-intro reveal">
+    <div class="hero-badge">✨ Free Forever · No Login Required · Runs in Your Browser</div>
+    <h1 class="hero-headline">
+      Your Teams status<br>
+      <span class="gradient-text">stays green.</span><br>
+      You stay sane.
+    </h1>
+    <p class="hero-desc">
+      Presence Buddy keeps your Microsoft Teams presence active using smart browser tricks —
+      Screen Wake Lock, simulated mouse events, and a whole lot of charm.
+    </p>
+  </div>
+
+  <!-- ── The App Widget ── -->
+  <div class="app-widget reveal">
+
+    <div>
+      <h2 class="app-title">Presence Buddy ✨</h2>
+      <p class="app-sub">your sleepy little screen-keeper</p>
+    </div>
+
+    <!-- Buddy character -->
+    <div class="buddy-wrap" id="buddyWrap">
+      <div class="buddy-glow" id="buddyGlow"></div>
+
+      <svg class="buddy-svg" id="buddySvg" viewBox="0 0 120 120" width="158" height="158" aria-label="Presence Buddy character">
+        <defs>
+          <radialGradient id="bg" cx="38%" cy="30%" r="68%">
+            <stop offset="0%" stop-color="#c084fc"/>
+            <stop offset="100%" stop-color="#6d28d9"/>
+          </radialGradient>
+          <radialGradient id="earGrad" cx="40%" cy="35%" r="60%">
+            <stop offset="0%" stop-color="#a855f7"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="60" cy="110" rx="32" ry="6.5" fill="rgba(0,0,0,.22)"/>
+        <ellipse cx="60" cy="64"  rx="48" ry="47"  fill="url(#bg)"/>
+        <ellipse cx="43" cy="42"  rx="15" ry="11"  fill="rgba(255,255,255,.16)" transform="rotate(-22,43,42)"/>
+        <ellipse cx="21" cy="26"  rx="11" ry="10.5" fill="url(#earGrad)"/>
+        <ellipse cx="99" cy="26"  rx="11" ry="10.5" fill="url(#earGrad)"/>
+        <ellipse cx="21" cy="25"  rx="6.5" ry="6"  fill="rgba(249,168,212,.5)"/>
+        <ellipse cx="99" cy="25"  rx="6.5" ry="6"  fill="rgba(249,168,212,.5)"/>
+
+        <!-- SLEEP STATE -->
+        <g id="stateAsleep">
+          <path d="M 36 61 Q 43 54 50 61" stroke="rgba(255,255,255,.9)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M 70 61 Q 77 54 84 61" stroke="rgba(255,255,255,.9)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <line x1="36" y1="60" x2="33" y2="57" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="84" y1="60" x2="87" y2="57" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M 52 77 Q 60 81 68 77" stroke="rgba(255,255,255,.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="57" cy="83" rx="3" ry="2" fill="rgba(167,139,250,.4)"/>
+        </g>
+
+        <!-- AWAKE STATE -->
+        <g id="stateAwake" style="display:none">
+          <circle cx="43" cy="59" r="12" fill="white"/>
+          <circle cx="77" cy="59" r="12" fill="white"/>
+          <circle cx="44.5" cy="57.5" r="7.5" fill="#2e1065"/>
+          <circle cx="78.5" cy="57.5" r="7.5" fill="#2e1065"/>
+          <circle cx="47.5" cy="55"   r="3.2"  fill="white"/>
+          <circle cx="81.5" cy="55"   r="3.2"  fill="white"/>
+          <circle cx="42"   cy="62"   r="1.5"  fill="rgba(255,255,255,.55)"/>
+          <circle cx="76"   cy="62"   r="1.5"  fill="rgba(255,255,255,.55)"/>
+          <circle cx="25"   cy="72"   r="10"   fill="rgba(249,168,212,.42)"/>
+          <circle cx="95"   cy="72"   r="10"   fill="rgba(249,168,212,.42)"/>
+          <path d="M 46 77 Q 60 94 74 77" stroke="rgba(255,255,255,.9)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+          <path d="M 50 78 Q 60 89 70 78" stroke="rgba(255,255,255,.25)" stroke-width="5"   fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+
+      <div class="zzz-wrap" id="zzzWrap">
+        <span class="zzz-item">z</span>
+        <span class="zzz-item">z</span>
+        <span class="zzz-item">z</span>
+      </div>
+      <div class="sparkle-wrap" id="sparkleWrap" style="display:none">
+        <span class="sparkle-item">✨</span>
+        <span class="sparkle-item">⭐</span>
+        <span class="sparkle-item">💫</span>
+        <span class="sparkle-item">🌟</span>
+      </div>
+    </div>
+
+    <p class="status-msg" id="statusMsg">💤 Catching up on some well-deserved sleep...</p>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="glass stat-card">
+        <span class="stat-icon">⏱️</span>
+        <span class="stat-label">Session</span>
+        <span class="stat-value" id="uptimeEl">00:00:00</span>
+      </div>
+      <div class="glass stat-card">
+        <span class="stat-icon">📡</span>
+        <span class="stat-label">Pings Sent</span>
+        <span class="stat-value" id="pingEl">0</span>
+      </div>
+    </div>
+
+    <!-- System status -->
+    <div class="glass status-card">
+      <div class="status-row">
+        <span>🖥️ Screen Wake Lock</span>
+        <span class="pill" id="wakePill">OFF</span>
+      </div>
+      <div class="status-row">
+        <span>🐭 Mouse Simulation</span>
+        <span class="pill" id="simPill">IDLE</span>
+      </div>
+    </div>
+
+    <!-- Activity zone -->
+    <div style="width:100%">
+      <div class="zone-label">🎮 activity zone</div>
+      <div class="playground" id="playground">
+        <canvas id="theCanvas" width="500" height="107"></canvas>
+        <div class="playground-off" id="playOff">
+          <span class="pico">😴</span>
+          <span>activate to see the magic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-hdr">
+        <span>Next ping in</span>
+        <span id="countdownEl">—</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Interval slider -->
+    <div class="glass slider-wrap">
+      <div class="slider-hdr">
+        <span>⏰ Ping every</span>
+        <span class="slider-val" id="sliderVal">30s</span>
+      </div>
+      <input type="range" id="sliderEl" min="10" max="120" step="5" value="30" aria-label="Ping interval"/>
+      <div class="slider-sub">
+        <span>10s — stay sharp</span>
+        <span>120s — play it cool</span>
+      </div>
+    </div>
+
+    <!-- Main button -->
+    <button class="toggle-btn" id="toggleBtn">🌙 Wake Up Buddy!</button>
+
+    <!-- Notes -->
+    <div class="glass info">
+      <div class="info-title">📋 Good to Know</div>
+      <div class="info-row">🌐 Teams Web — browser events keep you active 🟢</div>
+      <div class="info-row">💻 Teams Desktop — keep this tab in focus for best results</div>
+      <div class="info-row">🔒 Wake Lock works on Chrome, Edge &amp; Firefox (HTTPS)</div>
+      <div class="info-row">⚡ For bulletproof OS control, pair with AutoHotkey</div>
+    </div>
+
+  </div><!-- /app-widget -->
+
+  <div class="hero-scroll-hint reveal">Scroll to learn more</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     USE CASE TICKER
+═══════════════════════════════════════════════════════════ -->
+<div class="usecases-strip">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="dot"></span> WFH Warriors 🏠</div>
+    <div class="ticker-item"><span class="dot"></span> Coffee Break Champions ☕</div>
+    <div class="ticker-item"><span class="dot"></span> Deep Focus Defenders 🧠</div>
+    <div class="ticker-item"><span class="dot"></span> Lunch Break Heroes 🍕</div>
+    <div class="ticker-item"><span class="dot"></span> Mid-Meeting Escapees 🏃</div>
+    <div class="ticker-item"><span class="dot"></span> Power Nap Professionals 💤</div>
+    <div class="ticker-item"><span class="dot"></span> Parent Mode Activated 👶</div>
+    <div class="ticker-item"><span class="dot"></span> Dog Walk Devotees 🐕</div>
+    <div class="ticker-item"><span class="dot"></span> Two-Screen Multitaskers 🖥️</div>
+    <div class="ticker-item"><span class="dot"></span> Bathroom Break Survivors 🚽</div>
+    <div class="ticker-item"><span class="dot"></span> Stand-Up Dodgers 👀</div>
+    <div class="ticker-item"><span class="dot"></span> Remote Work Rebels 🌍</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════════════════════ -->
+<section id="how-it-works" class="section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label">📖 How It Works</p>
+      <h2 class="section-title gradient-text">Three steps.<br>Zero effort.</h2>
+      <p class="section-sub">Presence Buddy is designed to get out of your way. Here's all you need to know.</p>
+    </div>
+
+    <div class="hiw-steps stagger-children">
+
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <span class="step-icon">🎚️</span>
+        <h3 class="step-title">Set Your Interval</h3>
+        <p class="step-desc">Drag the slider to pick how often Buddy pings — anywhere from a snappy 10 seconds to a relaxed 2 minutes. Tune it to match your Teams timeout.</p>
+      </div>
+
+      <div class="step-card reveal">
+        <div class="step-num">02</div>
+        <span class="step-icon">🌙</span>
+        <h3 class="step-title">Wake Up Buddy</h3>
+        <p class="step-desc">Hit the button and watch Buddy spring to life! Screen Wake Lock engages, mouse simulation starts, and the activity zone lights up with the magic.</p>
+      </div>
+
+      <div class="step-card reveal">
+        <div class="step-num">03</div>
+        <span class="step-icon">☕</span>
+        <h3 class="step-title">Go Live Your Life</h3>
+        <p class="step-desc">Grab a coffee, take a walk, wrangle the kids — whatever you need. Buddy handles the status while you handle being a human being.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════════════════════════ -->
+<section id="features" class="section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label">⚡ Features</p>
+      <h2 class="section-title gradient-text">Everything you need.<br>Nothing you don't.</h2>
+      <p class="section-sub">Built lean, built smart. Every feature earns its place.</p>
+    </div>
+
+    <div class="features-grid stagger-children">
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">🖥️</div>
+        <h3 class="feature-title">Screen Wake Lock</h3>
+        <p class="feature-desc">Uses the native browser Wake Lock API to prevent your screen from sleeping — the same way video streaming sites keep your display on during playback.</p>
+        <span class="feature-tag">Browser API</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">🐭</div>
+        <h3 class="feature-title">Smart Mouse Simulation</h3>
+        <p class="feature-desc">Dispatches realistic <code>mousemove</code> and <code>pointermove</code> events with randomised positions and movement deltas — indistinguishable from real user input.</p>
+        <span class="feature-tag">Zero footprint</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">🎮</div>
+        <h3 class="feature-title">Live Activity Zone</h3>
+        <p class="feature-desc">A real-time canvas animation gives you satisfying visual proof that Buddy is on the job. Watch the glowing star bounce around while your status stays green.</p>
+        <span class="feature-tag">Canvas API</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">⏱️</div>
+        <h3 class="feature-title">Session Tracking</h3>
+        <p class="feature-desc">An uptime clock and a ping counter keep you informed. Know exactly how long Buddy has been covering for you and how many times it has fired.</p>
+        <span class="feature-tag">Live stats</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">🎛️</div>
+        <h3 class="feature-title">Custom Intervals</h3>
+        <p class="feature-desc">Fine-tune from 10 seconds (maximum aggression) to 120 seconds (breezy confidence). The interval slider updates live — even while Buddy is active.</p>
+        <span class="feature-tag">10s – 2 min</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">💜</div>
+        <h3 class="feature-title">Zero Setup. Zero Tracking.</h3>
+        <p class="feature-desc">No install, no account, no cookies, no analytics — nothing leaves your browser. Just open the page and go. Close the tab and it's like it never happened.</p>
+        <span class="feature-tag">100% private</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     USE CASES GRID
+═══════════════════════════════════════════════════════════ -->
+<section id="use-cases" class="section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label">🧑‍💻 Works Great For</p>
+      <h2 class="section-title gradient-text">Real situations.<br>Real relief.</h2>
+      <p class="section-sub">Because sometimes life happens and your status shouldn't have to know about it.</p>
+    </div>
+
+    <div class="usecases-grid stagger-children">
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">☕</span>
+        <h3 class="usecase-title">Coffee Break Champions</h3>
+        <p class="usecase-desc">15 minutes became 45. The barista was chatty. No judgment — Buddy's got you.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">🧠</span>
+        <h3 class="usecase-title">Deep Focus Defenders</h3>
+        <p class="usecase-desc">In the zone on something important? Stay there. Buddy handles the status performance.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">👶</span>
+        <h3 class="usecase-title">Parent Mode Activated</h3>
+        <p class="usecase-desc">Kids need you right now. Not in five minutes. Not after this meeting. Now.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">🐕</span>
+        <h3 class="usecase-title">Dog Walk Devotees</h3>
+        <p class="usecase-desc">Fresh air is good for you. Green dot anxiety is not. Take the walk. Buddy stays.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">💤</span>
+        <h3 class="usecase-title">Power Nap Professionals</h3>
+        <p class="usecase-desc">Twenty minutes of rest is worth four hours of productivity. Science. Buddy agrees.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">🍕</span>
+        <h3 class="usecase-title">Lunch Break Heroes</h3>
+        <p class="usecase-desc">You are legally entitled to that lunch hour. Take it. Eat something. You deserve it.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">🏃</span>
+        <h3 class="usecase-title">Mid-Meeting Escapees</h3>
+        <p class="usecase-desc">Nature called during the third hour of a standup. Buddy was there. No questions asked.</p>
+      </div>
+
+      <div class="usecase-card reveal">
+        <span class="usecase-emoji">🌍</span>
+        <h3 class="usecase-title">Remote Work Rebels</h3>
+        <p class="usecase-desc">Working asynchronously from anywhere. Because presence indicators weren't in the job description.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════════════════════ -->
+<section id="faq" class="section">
+  <div class="section-inner">
+    <div class="faq-layout">
+
+      <div class="faq-aside reveal-left">
+        <p class="section-label">❓ FAQ</p>
+        <h2 class="section-title gradient-text">You've got<br>questions.</h2>
+        <p class="section-sub">Buddy has answers. Mostly reassuring ones.</p>
+        <div class="faq-aside-buddy glass">
+          <span class="mini-buddy">🐱</span>
+          <p>Still curious? Send a message via the <a href="#contact" style="color:var(--purple-light)">contact form</a> below and Buddy will get back to you. Eventually.</p>
+        </div>
+      </div>
+
+      <div class="faq-list reveal-right">
+
+        <div class="faq-item">
+          <button class="faq-q">
+            Does Presence Buddy actually work with Microsoft Teams?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              <strong>Yes!</strong> For <strong>Teams Web</strong>, the browser events Buddy dispatches keep your presence active directly — same as if you were moving your mouse. For <strong>Teams Desktop</strong>, keeping this tab focused and visible gives the best results, since the Screen Wake Lock also prevents your screen from going dark (which is what usually triggers Away status).
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            Will IT or my manager be able to tell I'm using this?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Presence Buddy operates entirely within your browser and generates the same type of mouse events your real mouse produces. There is nothing unusual for IT to detect. That said — <strong>please use this responsibly</strong>. It's designed for legitimate breaks, focus time, and the realities of working from home, not for going completely off-grid while being paid to work.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            Does it drain my battery or slow my computer?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Minimal impact. The Screen Wake Lock does prevent deep sleep, which uses slightly more power than a fully sleeping screen. The canvas animation and ping events themselves are extremely lightweight — we're talking single-digit CPU milliseconds per second. On a modern laptop, you might notice 2–3% extra battery draw over a long session.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            What's the difference between Teams Web and Teams Desktop?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              <strong>Teams Web</strong> runs inside your browser, so Buddy's browser events directly influence presence — it's a very tight loop. <strong>Teams Desktop</strong> is a standalone Electron app that also monitors OS-level idle state. Buddy helps a lot (Wake Lock stops the screen from sleeping), but for fully bulletproof Desktop coverage, pairing with a tool like <strong>AutoHotkey</strong> (Windows) gives you OS-level mouse simulation that nothing can ignore.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            Can I use Presence Buddy on my phone?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Technically yes — mobile Chrome and Safari support most of the features. However, mobile browsers aggressively suspend background tabs and limit Wake Lock behaviour when the screen is off. Results will vary. Presence Buddy was designed for desktop and laptop browsers and works best there.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            Do you collect any data? Is anything tracked?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              <strong>Absolutely not.</strong> Presence Buddy runs 100% in your browser. There are no analytics, no cookies, no network requests, no third-party trackers, and no server to send anything to. When you close the tab, nothing persists. We genuinely have no idea you exist — and that's exactly how we like it.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            Why does my status sometimes still flip to Away?
+            <span class="faq-chevron">⌄</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              This usually happens when the Teams Desktop app's own OS-level idle detection kicks in independently of the browser, or if the tab loses focus for an extended period. Try keeping this tab visible (not just open in the background). If it keeps happening, shorten your ping interval, or for Teams Desktop users: pair Buddy with AutoHotkey for full OS-level coverage.
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /faq-list -->
+    </div><!-- /faq-layout -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════════════════════ -->
+<section id="about" class="section">
+  <div class="section-inner">
+    <div class="about-layout">
+
+      <div class="about-text reveal-left">
+        <p class="section-label">💜 About</p>
+        <h2 class="section-title gradient-text">Built for humans<br>who take breaks.</h2>
+
+        <p>Somewhere between your <strong>third consecutive video call</strong> and your fifth coffee refill, someone had a simple idea: what if your status could just handle itself for a bit?</p>
+
+        <p>Presence Buddy started as a weekend experiment — a tiny browser script that prevented the dreaded <em>yellow dot of shame</em> from appearing while you were in the kitchen, in the garden, or just staring at the wall trying to remember what day it was.</p>
+
+        <p>A few iterations later, it evolved into this: a <strong>lovable little purple creature</strong> who takes the job seriously so you don't have to. No tracking, no accounts, no data — just a clean browser tool that runs entirely on your machine and disappears the moment you close the tab.</p>
+
+        <p><strong>Remote work is already complicated enough.</strong> Your presence indicator shouldn't add to that anxiety. Buddy is here to take that one small stressor off your plate — permanently.</p>
+
+        <div class="about-tags">
+          <span class="about-tag">🌐 100% Browser-Based</span>
+          <span class="about-tag">🔒 Zero Data Collected</span>
+          <span class="about-tag">⚡ No Install Needed</span>
+          <span class="about-tag">💜 Made with care</span>
+          <span class="about-tag">☕ Fuelled by coffee</span>
+          <span class="about-tag">🐱 Buddy-approved</span>
+        </div>
+      </div>
+
+      <div class="about-visual reveal-right">
+        <div class="about-blob"></div>
+        <div class="about-card glass">
+          <div class="about-buddy-wrap">
+            <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+              <defs>
+                <radialGradient id="bg2" cx="38%" cy="30%" r="68%">
+                  <stop offset="0%" stop-color="#c084fc"/>
+                  <stop offset="100%" stop-color="#6d28d9"/>
+                </radialGradient>
+                <radialGradient id="ear2" cx="40%" cy="35%" r="60%">
+                  <stop offset="0%" stop-color="#a855f7"/>
+                  <stop offset="100%" stop-color="#7c3aed"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="60" cy="110" rx="32" ry="6.5" fill="rgba(0,0,0,.22)"/>
+              <ellipse cx="60" cy="64"  rx="48" ry="47"  fill="url(#bg2)"/>
+              <ellipse cx="43" cy="42"  rx="15" ry="11"  fill="rgba(255,255,255,.16)" transform="rotate(-22,43,42)"/>
+              <ellipse cx="21" cy="26"  rx="11" ry="10.5" fill="url(#ear2)"/>
+              <ellipse cx="99" cy="26"  rx="11" ry="10.5" fill="url(#ear2)"/>
+              <ellipse cx="21" cy="25"  rx="6.5" ry="6" fill="rgba(249,168,212,.5)"/>
+              <ellipse cx="99" cy="25"  rx="6.5" ry="6" fill="rgba(249,168,212,.5)"/>
+              <!-- Awake eyes for about section -->
+              <circle cx="43" cy="59" r="12" fill="white"/>
+              <circle cx="77" cy="59" r="12" fill="white"/>
+              <circle cx="44.5" cy="57.5" r="7.5" fill="#2e1065"/>
+              <circle cx="78.5" cy="57.5" r="7.5" fill="#2e1065"/>
+              <circle cx="47.5" cy="55"   r="3.2" fill="white"/>
+              <circle cx="81.5" cy="55"   r="3.2" fill="white"/>
+              <circle cx="25"   cy="72"   r="10"  fill="rgba(249,168,212,.42)"/>
+              <circle cx="95"   cy="72"   r="10"  fill="rgba(249,168,212,.42)"/>
+              <path d="M 46 77 Q 60 94 74 77" stroke="rgba(255,255,255,.9)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 style="font-size:17px;font-weight:900;margin-bottom:8px">Hi, I'm Buddy! 👋</h3>
+          <p style="font-size:13px;font-weight:700;color:var(--text-muted);line-height:1.6">Your personal status guardian. I take naps seriously and green dots even more seriously.</p>
+          <div class="about-stats">
+            <div class="about-stat">
+              <div class="about-stat-val">100%</div>
+              <div class="about-stat-lbl">Free forever</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-val">0</div>
+              <div class="about-stat-lbl">Data collected</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-val">3</div>
+              <div class="about-stat-lbl">Browser APIs</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-val">∞</div>
+              <div class="about-stat-lbl">Breaks covered</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════════════════════ -->
+<section id="contact" class="section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label">📬 Contact</p>
+      <h2 class="section-title gradient-text">Say hello.<br>Buddy loves mail.</h2>
+      <p class="section-sub">Got a bug report, feature idea, or just want to say Buddy improved your WFH life? We'd love to hear from you.</p>
+    </div>
+
+    <div class="contact-wrap reveal">
+      <div class="contact-card">
+
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Your Name</label>
+              <input type="text" id="contactName" name="name" placeholder="Alex Remote" required/>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email Address</label>
+              <input type="email" id="contactEmail" name="email" placeholder="alex@company.com" required/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactSubject">What's this about?</label>
+            <select id="contactSubject" name="subject">
+              <option value="">Pick a topic...</option>
+              <option value="bug">🐛 Bug Report</option>
+              <option value="feature">💡 Feature Request</option>
+              <option value="hi">👋 Just Saying Hi</option>
+              <option value="love">💜 I Love Presence Buddy!</option>
+              <option value="collab">🤝 Partnership / Collab</option>
+              <option value="other">🤷 Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMsg">Your Message</label>
+            <textarea id="contactMsg" name="message" placeholder="Tell Buddy what's on your mind..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">💌 Send Message</button>
+        </form>
+
+        <!-- Success state -->
+        <div class="form-success" id="formSuccess">
+          <span class="success-icon">✨</span>
+          <h3>Message received!</h3>
+          <p>Thanks for reaching out! Buddy does the happy bounce when messages arrive.<br>We'll get back to you soon — probably faster than your Teams status turns yellow.</p>
+          <button class="reset-btn" id="formReset">Send another message</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <a href="#hero" class="footer-logo">✨ Presence Buddy</a>
+      <p>Keeping remote workers green since whenever you first found this page. Runs in your browser. Leaves no trace. Judges no one.</p>
+      <div class="footer-quote">
+        "Status green. Vibes immaculate.<br>Buddy on duty." 🐱
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#hero">The App</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#use-cases">Use Cases</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Learn</h4>
+      <ul>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Technical</h4>
+      <ul>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WakeLock" target="_blank" rel="noopener">Wake Lock API ↗</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent" target="_blank" rel="noopener">MouseEvent API ↗</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noopener">Canvas API ↗</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Presence Buddy. Built for remote workers, by remote workers.</p>
+    <div class="footer-love">Made with <span>♥</span> and too much coffee</div>
+  </div>
+</footer>
+
+<!-- ── Scripts ── -->
+<script src="js/stars.js"></script>
+<script src="js/canvas.js"></script>
+<script src="js/buddy.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

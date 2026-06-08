@@ -1,0 +1,156 @@
+/* ============================================================
+   animations.css — All keyframes + scroll reveal utilities
+   ============================================================ */
+
+/* ── Scroll Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* Stagger delays for children */
+.stagger-children > *:nth-child(1) { transition-delay: 0s; }
+.stagger-children > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { transition-delay: 0.2s; }
+.stagger-children > *:nth-child(4) { transition-delay: 0.3s; }
+.stagger-children > *:nth-child(5) { transition-delay: 0.4s; }
+.stagger-children > *:nth-child(6) { transition-delay: 0.5s; }
+
+/* ── Star twinkle ── */
+@keyframes twinkle {
+  0%, 100% { opacity: .15; transform: scale(.8); }
+  50%       { opacity: 1;   transform: scale(1.3); }
+}
+
+/* ── Buddy ── */
+@keyframes breathe {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50%       { transform: scale(1.035) translateY(-4px); }
+}
+@keyframes buddyBounce {
+  0%, 100% { transform: scale(1) translateY(0) rotate(-2.5deg); }
+  50%       { transform: scale(1.06) translateY(-12px) rotate(2.5deg); }
+}
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.18); }
+}
+
+/* ── Zzz ── */
+@keyframes zzzFloat {
+  0%   { opacity: 0; transform: translate(0,0) scale(.8); }
+  18%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(14px,-38px) scale(.5); }
+}
+
+/* ── Sparkles ── */
+@keyframes sparkle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: .7; }
+  50%       { transform: translateY(-9px) scale(1.35); opacity: 1; }
+}
+
+/* ── Stat pop ── */
+@keyframes statPop {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.25); }
+}
+
+/* ── Confetti ── */
+@keyframes confFall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateY(320px) rotate(540deg) scale(0); }
+}
+
+/* ── Ripple ── */
+@keyframes rippleOut {
+  from { transform: scale(0); opacity: 1; }
+  to   { transform: scale(3.2); opacity: 0; }
+}
+
+/* ── Ticker / Marquee ── */
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Nav shine ── */
+@keyframes navShine {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ── Float (about section blob) ── */
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(20px, -15px) scale(1.04); }
+  66%       { transform: translate(-10px, 12px) scale(0.97); }
+}
+
+/* ── Gradient shift (hero bg) ── */
+@keyframes gradShift {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+/* ── FAQ chevron rotate ── */
+@keyframes chevronOpen {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(180deg); }
+}
+
+/* ── Button shimmer ── */
+@keyframes btnShimmer {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ── Section number glow ── */
+@keyframes numGlow {
+  0%, 100% { text-shadow: 0 0 30px rgba(192,132,252,0.3); }
+  50%       { text-shadow: 0 0 60px rgba(192,132,252,0.7), 0 0 100px rgba(236,72,153,0.3); }
+}
+
+/* ── Success bounce ── */
+@keyframes successBounce {
+  0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
+  80%  { transform: scale(0.95) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ── Pulse ring (contact) ── */
+@keyframes pulseRing {
+  0%   { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ── Card hover glow pulse ── */
+@keyframes cardGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192,132,252,0); }
+  50%       { box-shadow: 0 0 30px 4px rgba(192,132,252,0.15); }
+}
